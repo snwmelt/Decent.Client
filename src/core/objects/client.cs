@@ -21,7 +21,7 @@ namespace Decent.Client.core.objects
         [NonSerialized]
         int mwodio;
 
-        public client (SerializationInfo info, StreamingContext context)
+        private client (SerializationInfo info, StreamingContext context)
         {
             clientDiskObject = new FileInfo(info.GetString("clientDiskObjectPath"));
             clientIP         = new IPAddress((Byte[])info.GetValue("clientIPByteArry", Type.GetType("System.Byte[]")));
@@ -40,6 +40,8 @@ namespace Decent.Client.core.objects
             this.clientIP         = clientIP;
             this.clientKey        = clientKey;
             this.clientUsername   = clientUsername;
+
+            Serialize(0);
         }
 
         public FileInfo clientDiskObject
@@ -125,7 +127,7 @@ namespace Decent.Client.core.objects
                 throw new System.ArgumentException("Input Out Wait Seconds Out Of Bounds : " + maxWaitOnDiskIO);
 
             if (!clientDiskObject.Exists) 
-                throw new System.ArgumentException("Client Object Does Not Exist \n FileInfo.FullName : " + clientDiskObject.FullName);
+                throw new System.ArgumentException("Client Object Does Not Exist \nFileInfo.FullName : " + clientDiskObject.FullName);
 
             try
             {
@@ -223,11 +225,12 @@ namespace Decent.Client.core.objects
                     try
                     {
                         FStream = new FileStream(clientDiskObject.FullName, FileMode.OpenOrCreate);
+                        break;
                     }
                     catch { }
                 }
 
-                FStream = null;
+                if (FStream == null) throw ioe;
             }
         }
 
@@ -245,6 +248,7 @@ namespace Decent.Client.core.objects
                     BFormatter.Serialize(FStream, this);
 
                     FStream.Dispose();
+                    FStream = null;
                 }
             }
         }
