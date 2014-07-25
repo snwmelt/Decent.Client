@@ -67,8 +67,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="core\clientPool.cs" />
     <Compile Include="core\objects\client.cs" />
-    <Compile Include="core\ui\MWFrame\clientPool.cs" />
     <Compile Include="core\ui\MWFrame\MWFrame.cs" />
     <Compile Include="core\ui\MWFrame\support\FormsScreenWrapper.cs" />
     <Compile Include="MainWindow.xaml.cs">
